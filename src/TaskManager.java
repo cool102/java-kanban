@@ -3,9 +3,9 @@ import java.util.*;
 public class TaskManager {
     private static int taskCount = 0;
 
-    Map<Integer, Task> tasks = new HashMap<>();
-    Map<Integer, Subtask> subtasks = new HashMap<>();
-    Map<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
 
 
     public TaskManager() {
@@ -75,16 +75,16 @@ public class TaskManager {
         tasks.put(updateTask.getId(), updateTask);
     }
 
-    public void updateSubtask(Subtask updateSubtask) {
-        int epicId = updateSubtask.getEpicId();
-        List<Subtask> allSubTasksByEpicID = getAllSubTasksByEpicID(epicId);
-        TaskStatus epicStatus = setEpicStatus(allSubTasksByEpicID);
+    public void updateSubtask(Subtask forUpdate) {
+        int epicId = forUpdate.getEpicId();
+        List<Subtask> allSubtasksOfEpic = getAllSubTasksByEpicId(epicId);
+        TaskStatus epicStatus = evaluateEpicStatus(allSubtasksOfEpic);
         Epic epicById = getEpicById(epicId);
         epicById.setTaskStatus(epicStatus);
-        subtasks.put(updateSubtask.getId(), updateSubtask);
+        subtasks.put(forUpdate.getId(), forUpdate);
     }
 
-    private List<Subtask> getAllSubTasksByEpicID(int epicId) {
+    private List<Subtask> getAllSubTasksByEpicId(int epicId) {
         List<Subtask> allSubtaskOfEpic = new ArrayList<>();
         for (Subtask sub : getSubtasks()) {
             if ((sub.getEpicId() == epicId)) {
@@ -94,15 +94,15 @@ public class TaskManager {
         return allSubtaskOfEpic;
     }
 
-    private TaskStatus setEpicStatus(List<Subtask> subtasks) {
+    private TaskStatus evaluateEpicStatus(List<Subtask> subtasks) {
         int size = subtasks.size();
-        long countDoneStatus = subtasks.stream().filter(s -> s.getTaskStatus() == TaskStatus.DONE)
+        long subtasksInDone = subtasks.stream().filter(s -> s.getTaskStatus() == TaskStatus.DONE)
                 .count();
-        long countNewStatus = subtasks.stream().filter(s -> s.getTaskStatus() == TaskStatus.NEW)
+        long subtasksInNew = subtasks.stream().filter(s -> s.getTaskStatus() == TaskStatus.NEW)
                 .count();
-        if (size == countDoneStatus) {
+        if (subtasksInDone == size) {
             return TaskStatus.DONE;
-        } else if (size == countNewStatus) {
+        } else if (subtasksInNew == size) {
             return TaskStatus.NEW;
         } else {
             return TaskStatus.IN_PROGRESS;

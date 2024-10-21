@@ -16,9 +16,9 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask {" + "id = " + this.getId() +
-                "name = " + this.getName() + ", description= " + this.getDescription() +
-                " ,status=" + taskStatus +
+        return "Subtask {" + "id=" + this.getId() + "," +
+                "name=" + this.getName() + ", description=" + this.getDescription() +
+                ",status=" + this.getTaskStatus() +
                 "} ";
     }
 }
