@@ -1,10 +1,13 @@
+package task;
+
 import java.util.Objects;
 
 public class Task {
-    private TaskStatus taskStatus;
-    private int id;
-    private String name;
-    private String description;
+    protected TaskStatus taskStatus;
+    protected int id;
+    protected String name;
+    protected String description;
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
@@ -18,7 +21,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "task.Task{" +
                 "id=" + id + ", " +
                 "name=" + name + ", " +
                 "description= " + description + ", " +
