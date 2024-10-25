@@ -8,7 +8,7 @@ import task.TaskStatus;
 import java.util.*;
 
 public class TaskManager {
-    private static int taskCount = 0;
+    private int taskCount = 0;
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
@@ -35,8 +35,12 @@ public class TaskManager {
         Integer epicId = subtask.getEpicId();
         if (epicId != null) {
             Epic epic = epics.get(epicId);
-            epic.getSubtasksIds().add(subtaskId);
-            return subtaskId;
+            if (epic != null) {
+                epic.getSubtasksIds().add(subtaskId);
+                return subtaskId;
+            } else {
+                throw new RuntimeException("epic not exist, because epic = null");
+            }
         } else {
             throw new RuntimeException("cant add subtask" + subtask + " because epic id = null");
         }
@@ -50,16 +54,16 @@ public class TaskManager {
         return epic.getId();
     }
 
-    public Collection<Task> getTasks() {
-        return tasks.values();
+    public List<Task> getTasks() {
+        return tasks.values().stream().toList();
     }
 
-    public Collection<Subtask> getSubtasks() {
-        return subtasks.values();
+    public List<Subtask> getSubtasks() {
+        return subtasks.values().stream().toList();
     }
 
-    public Collection<Epic> getEpics() {
-        return epics.values();
+    public List<Epic> getEpics() {
+        return epics.values().stream().toList();
     }
 
     public Task getTaskById(int id) {
@@ -94,8 +98,7 @@ public class TaskManager {
         Epic epic = getEpicById(epicId);
         List<Integer> subtasksIds = epic.getSubtasksIds();
         TaskStatus epicStatus = evaluateEpicStatus(subtasksIds);
-        Epic epicById = getEpicById(epicId);
-        epicById.setTaskStatus(epicStatus);
+        epic.setTaskStatus(epicStatus);
         subtasks.put(forUpdate.getId(), forUpdate);
     }
 
@@ -111,8 +114,8 @@ public class TaskManager {
     }
 
     public void removeSubtask(int id) {
-        Subtask forRemove = getSubtaskById(id);
-        int epicId = forRemove.getEpicId();
+        Subtask subtask = getSubtaskById(id);
+        int epicId = subtask.getEpicId();
         Epic epic = getEpicById(epicId);
         List<Integer> subtasksIds = epic.getSubtasksIds();
         subtasksIds.remove(Integer.valueOf(id));
