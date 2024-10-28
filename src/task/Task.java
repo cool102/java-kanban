@@ -3,8 +3,8 @@ package task;
 import java.util.Objects;
 
 public class Task {
-    protected TaskStatus taskStatus;
     protected int id;
+    protected TaskStatus taskStatus;
     protected String name;
     protected String description;
 
