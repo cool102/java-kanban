@@ -92,7 +92,7 @@ public class Main {
 
         out.println("\nTEST 11 - update epic 1\n" + manager.getEpicById(epic1.getId()));
         Epic epicU = new Epic("Сдать сессию досрочно", "");
-        manager.updateEpic(epicU, epic1.getId());
+        manager.updateEpic(epicU);
         out.println(manager.getEpicById(epic1.getId()));
 
 
