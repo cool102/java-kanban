@@ -3,6 +3,9 @@ package task;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * Class define Epic;
+ */
 public class Epic extends Task {
     private final List<Integer> subtasksIds = new ArrayList<>();
 
