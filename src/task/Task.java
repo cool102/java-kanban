@@ -2,6 +2,9 @@ package task;
 
 import java.util.Objects;
 
+/***
+ * Class defines a task;
+ */
 public class Task {
     protected int id;
     protected TaskStatus taskStatus;
