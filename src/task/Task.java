@@ -11,8 +11,8 @@ public class Task {
     protected String name;
     protected String description;
 
-    public Task(String aName, String description) {
-        name = aName;
+    public Task(String one_b, String description) {
+        name = one_b;
         this.description = description;
     }
 
