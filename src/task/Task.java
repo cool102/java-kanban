@@ -3,7 +3,7 @@ package task;
 import java.util.Objects;
 
 /***
- * Class defines a task;
+ * Class defines a Task;
  */
 public class Task {
     protected int id;
