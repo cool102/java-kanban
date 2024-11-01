@@ -10,10 +10,9 @@ public class Task {
     protected TaskStatus taskStatus;
     protected String name;
     protected String description;
-    protected String one_b;
 
-    public Task(String one_b, String description) {
-        name = one_b;
+    public Task(String name, String description) {
+        this.name = name;
         this.description = description;
     }
 
