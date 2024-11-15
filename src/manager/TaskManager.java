@@ -46,7 +46,5 @@ public interface TaskManager {
 
     public void clearTasks();
 
-    int generateTaskId();
-
     HistoryManager getHistoryManager();
 }

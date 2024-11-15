@@ -8,10 +8,9 @@ import task.Task;
 import java.util.List;
 
 class InMemoryHistoryManagerTest {
-    private static TaskManager manager;
-    private static Task task;
-    private static Task addedTask;
-
+    private TaskManager manager;
+    private Task task;
+    private Task addedTask;
 
     @BeforeEach
     public void prepareFixture() {
