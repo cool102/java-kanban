@@ -1,7 +1,7 @@
 package manager;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.Epic;
 import task.Subtask;
@@ -12,8 +12,10 @@ class InMemoryTaskManagerTest {
     private static TaskManager manager;
     private static Task task1 ;
     private static Task task2 ;
+    private static Task task3 ;
     private static Task addedTask1;
     private static Task addedTask2;
+    private static Task addedTask3;
     private static Epic epic1;
     private static Epic addedEpic;
     private static  Subtask subtask1 ;
@@ -21,11 +23,13 @@ class InMemoryTaskManagerTest {
     private static  Subtask addedSubtask1;
     private static  Subtask addedSubtask2;
 
-    @BeforeAll
-    public static void prepareFixture() {
+    @BeforeEach
+    public void prepareFixture() {
         manager = Managers.getDefault();
         task1 = new Task("task 1", "simple task 1");
         task2 = new Task("task 1", "task 2 with status ", TaskStatus.NEW);
+        task3 = new Task("task 1", "task 2 with status ", TaskStatus.NEW);
+        task3.setId(999);
         addedTask1 = manager.addTask(task1);
         addedTask2 = manager.addTask(task2);
         epic1 = new Epic("epic 1", "simple epic 1");
@@ -34,6 +38,13 @@ class InMemoryTaskManagerTest {
         subtask2 = new Subtask("subtask 2", "simple subtask 2", TaskStatus.NEW, addedEpic.getId());
         addedSubtask1 = manager.addSubtask(subtask1);
         addedSubtask2 = manager.addSubtask(subtask2);
+    }
+
+    @Test
+    public void checkTaskIdsNotConflict() {
+        int manualCreatedTaskId = task3.getId();
+        int idGeneratedByManager = addedTask1.getId();
+        Assertions.assertNotEquals(manualCreatedTaskId, idGeneratedByManager);
     }
 
     @Test

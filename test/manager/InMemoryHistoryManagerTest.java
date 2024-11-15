@@ -1,7 +1,7 @@
 package manager;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.Task;
 
@@ -13,8 +13,8 @@ class InMemoryHistoryManagerTest {
     private static Task addedTask;
 
 
-    @BeforeAll
-    public static void prepareFixture() {
+    @BeforeEach
+    public void prepareFixture() {
         manager = Managers.getDefault();
         task = new Task("task 1", "Description");
         addedTask = manager.addTask(task);
