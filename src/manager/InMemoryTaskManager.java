@@ -21,11 +21,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-    public HistoryManager getHistoryManager() {
-        return historyManager;
-    }
-
-
     @Override
     public Task addTask(Task newTask) {
         newTask.setId(generateTaskId());
@@ -164,6 +159,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void clearTasks() {
         tasks.clear();
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     @Override

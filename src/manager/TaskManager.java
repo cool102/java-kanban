@@ -46,6 +46,5 @@ public interface TaskManager {
 
     public void clearTasks();
 
-    HistoryManager getHistoryManager(); //TODO Я не могу убрать этот метод. Если его убрать, то почему то в тестах я не могу обратиться к хистори менеджеру -
-    //TODO я пробовал и поле создать и гет метод чтобы получать доступ к хистори менеджеру внутри класса InMemoryManager. Подскажи как сделать?
+    List<Task> getHistory();
 }

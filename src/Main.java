@@ -21,15 +21,15 @@ public class Main {
         Subtask subtask2 = new Subtask("subtask 2", "simple subtask 2", TaskStatus.NEW, epic1.getId());
         manager.addSubtask(subtask2);
 
-        System.out.println(manager.getHistoryManager().getHistory());
+        System.out.println(manager.getHistory());
 
         manager.getTaskById(task1.getId());
-        System.out.println(manager.getHistoryManager().getHistory());
+        System.out.println(manager.getHistory());
 
         manager.getSubtaskById(subtask1.getId());
-        System.out.println(manager.getHistoryManager().getHistory());
+        System.out.println(manager.getHistory());
 
         manager.getEpicById(epic1.getId());
-        System.out.println(manager.getHistoryManager().getHistory());
+        System.out.println(manager.getHistory());
     }
 }

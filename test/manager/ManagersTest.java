@@ -9,11 +9,10 @@ class ManagersTest {
     @Test
     void getDefault() {
         TaskManager aDefault = Managers.getDefault();
-        assertNotNull(aDefault.getHistoryManager());
+        assertNotNull(aDefault.getHistory());
         assertNotNull(aDefault.getTasks());
         assertNotNull(aDefault.getSubtasks());
         assertNotNull(aDefault.getEpics());
-        assertNotNull(aDefault.getHistoryManager());
     }
 
     @Test

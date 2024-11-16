@@ -25,7 +25,7 @@ class InMemoryHistoryManagerTest {
         beforeChange.setDescription("new Description");
         Task changedTask = manager.updateTask(beforeChange);
         manager.getTaskById(changedTask.getId());
-        List<Task> history = manager.getHistoryManager().getHistory();
+        List<Task> history = manager.getHistory();
         Task taskBeforeChange = history.get(0);
         Task taskAfterChange = history.get(1);
         Assertions.assertEquals(taskBeforeChange.getDescription(), taskAfterChange.getDescription(), "Одна и та же задача в истории просмотра имеет разные описания");
