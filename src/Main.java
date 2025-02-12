@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         Task task1 = new Task("task 1","simple task 1");
-        Task task2 = new Task("task 1", "task 2 with status ", TaskStatus.NEW);
+        Task task2 = new Task("task 2", "task 2 with status ", TaskStatus.NEW);
         TaskManager manager = Managers.getDefault();
 
         manager.addTask(task1);
