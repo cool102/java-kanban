@@ -44,7 +44,7 @@ public interface TaskManager {
 
     void clearEpics();
 
-    public void clearTasks();
+    void clearTasks();
 
     List<Task> getHistory();
 }

@@ -1,6 +1,7 @@
 package manager;
 
 import task.Task;
+
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -21,8 +22,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             removeNode(forRemove);
             tasks.linkLast(task);
             historyMap.put(task.getId(), tasks.getLastNode());
-        }
-        else {
+        } else {
             tasks.addFirst(task);
             historyMap.put(task.getId(), tasks.getFirstNode());
         }
@@ -42,7 +42,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         tasks.removeNode(node);
     }
 
-    static class TaskLinkedList<T> extends LinkedList <T>{
+    static class TaskLinkedList<T> extends LinkedList<T> {
         private Node<T> head;
         private Node<T> tail;
 
@@ -78,8 +78,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         public Node<T> getFirstNode() {
             final Node<T> curHead = head;
-            if (curHead == null)
-                throw new NoSuchElementException();
+            if (curHead == null) throw new NoSuchElementException();
             return head;
         }
 
@@ -91,10 +90,8 @@ public class InMemoryHistoryManager implements HistoryManager {
             final Node<T> oldHeadTask = head;
             final Node<T> newNode = new Node<>(null, task, oldHeadTask);
             head = newNode;
-            if (oldHeadTask == null)
-                tail = newNode;
-            else
-                oldHeadTask.prev = newNode;
+            if (oldHeadTask == null) tail = newNode;
+            else oldHeadTask.prev = newNode;
             size++;
         }
 
