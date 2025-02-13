@@ -11,7 +11,7 @@ import task.TaskStatus;
 import java.util.List;
 
 public class InMemoryHistoryManagerTest2 {
-    private InMemoryTaskManager manager;
+    private TaskManager manager;
     private Task addedTask;
     private Epic epic;
     private Subtask subtask;
