@@ -10,18 +10,18 @@ import task.TaskStatus;
 
 class InMemoryTaskManagerTest {
     private static TaskManager manager;
-    private static Task task1 ;
-    private static Task task2 ;
-    private static Task task3 ;
+    private static Task task1;
+    private static Task task2;
+    private static Task task3;
     private static Task addedTask1;
     private static Task addedTask2;
     private static Task addedTask3;
     private static Epic epic1;
     private static Epic addedEpic;
-    private static  Subtask subtask1 ;
-    private static  Subtask subtask2 ;
-    private static  Subtask addedSubtask1;
-    private static  Subtask addedSubtask2;
+    private static Subtask subtask1;
+    private static Subtask subtask2;
+    private static Subtask addedSubtask1;
+    private static Subtask addedSubtask2;
 
     @BeforeEach
     public void prepareFixture() {
@@ -49,9 +49,9 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void checkTaskManagerWork() {
-        Assertions.assertTrue(manager.getSubtasks().size() == 2, "Список субтасков не равен ожидаемому");
-        Assertions.assertTrue(manager.getTasks().size() == 2,"Список субтасков не равен ожидаемому");
-        Assertions.assertTrue(manager.getEpics().size() == 1,"Список субтасков не равен ожидаемому");
+        Assertions.assertEquals(2, manager.getSubtasks().size(), "Список субтасков не равен ожидаемому");
+        Assertions.assertEquals(2, manager.getTasks().size(), "Список субтасков не равен ожидаемому");
+        Assertions.assertEquals(1, manager.getEpics().size(), "Список субтасков не равен ожидаемому");
         Assertions.assertEquals(manager.getTaskById(addedTask1.getId()), addedTask1, "Добавленная и полученная задачи не равны");
         Assertions.assertEquals(manager.getTaskById(addedTask2.getId()), addedTask2, "Добавленная и полученная задачи не равны");
         Assertions.assertEquals(manager.getSubtaskById(subtask1.getId()), addedSubtask1, "Добавленная и полученная задачи не равны");
@@ -61,6 +61,6 @@ class InMemoryTaskManagerTest {
     @Test
     public void checkUnmutableOfTask() {
         Assertions.assertEquals(manager.getTaskById(addedTask1.getId()).getName(), task1.getName(), "После добавления в БД задача изменилась");
-        Assertions.assertEquals(manager.getTaskById(addedTask1.getId()).getDescription(), task1.getDescription(),  "После добавления в БД задача изменилась");
+        Assertions.assertEquals(manager.getTaskById(addedTask1.getId()).getDescription(), task1.getDescription(), "После добавления в БД задача изменилась");
     }
 }

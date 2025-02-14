@@ -8,13 +8,13 @@ import task.TaskStatus;
 public class Main {
 
     public static void main(String[] args) {
-        Task task1 = new Task("task 1","simple task 1");
-        Task task2 = new Task("task 1", "task 2 with status ", TaskStatus.NEW);
+        Task task1 = new Task("task 1", "simple task 1");
+        Task task2 = new Task("task 2", "task 2 with status ", TaskStatus.NEW);
         TaskManager manager = Managers.getDefault();
 
         manager.addTask(task1);
         manager.addTask(task2);
-        Epic epic1 = new Epic("epic 1" , "simple epic 1");
+        Epic epic1 = new Epic("epic 1", "simple epic 1");
         manager.addEpic(epic1);
         Subtask subtask1 = new Subtask("subtask 1", "simple subtask 1", TaskStatus.NEW, epic1.getId());
         manager.addSubtask(subtask1);
