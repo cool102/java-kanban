@@ -14,12 +14,12 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private final File file;
+    private InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
 
     public InMemoryTaskManager getInMemoryTaskManager() {
         return inMemoryTaskManager;
     }
 
-    private InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
     public String getTableHead() {
         return tableHead;
     }
@@ -86,7 +86,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 iterator.remove();
             }
         }
-        for(String line : list) {
+        for (String line : list) {
             String[] split1 = line.split(",");
             String taskType = split1[1];
             if (taskType.equals("TASK")) {
