@@ -4,8 +4,11 @@
 # Log file
 *.log
 
+# Игнорируем файлы конфигурации IDE
+.idea/
+
 #
-*.iml
+java-kanban.iml
 
 # BlueJ files
 *.ctxt
