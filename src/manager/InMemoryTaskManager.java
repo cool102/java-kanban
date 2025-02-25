@@ -14,7 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
-    private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
+    private final InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
     private int taskCount = 0;
 
     public InMemoryTaskManager() {
@@ -23,21 +23,24 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task addTask(Task newTask) {
-        newTask.setId(generateTaskId());
+        if (newTask.getId() == 0) {
+            newTask.setId(generateTaskId());
+        }
         tasks.put(newTask.getId(), newTask);
         return newTask;
     }
 
     @Override
     public Subtask addSubtask(Subtask subtask) {
-        int subtaskId = generateTaskId();
-        subtask.setId(subtaskId);
-        subtasks.put(subtaskId, subtask);
+        if (subtask.getId() == 0) {
+            subtask.setId(generateTaskId());
+        }
+        subtasks.put(subtask.getId(), subtask);
         Integer epicId = subtask.getEpicId();
         if (epicId != null) {
             Epic epic = epics.get(epicId);
             if (epic != null) {
-                epic.getSubtasksIds().add(subtaskId);
+                epic.getSubtasksIds().add(subtask.getId());
                 updateEpic(epic);
                 return subtask;
             } else {
@@ -46,12 +49,13 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             throw new RuntimeException("cant add subtask" + subtask + " because epic id = null");
         }
-
     }
 
     @Override
     public Epic addEpic(Epic epic) {
-        epic.setId(generateTaskId());
+        if (epic.getId() == 0) {
+            epic.setId(generateTaskId());
+        }
         epic.setTaskStatus(TaskStatus.NEW);
         epics.put(epic.getId(), epic);
         return epic;
