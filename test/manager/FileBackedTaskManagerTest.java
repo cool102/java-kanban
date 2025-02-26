@@ -1,5 +1,6 @@
 package manager;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.Task;
 import task.TaskStatus;
@@ -12,8 +13,13 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileBackedTaskManagerTest {
-    File savedFile = new File("savedTasks");
+    private final File savedFile = new File("savedTasks");
+    private File file = new File("savedTasks");
 
+    @BeforeEach
+    public void setup() throws IOException {
+       file = File.createTempFile("fileBackedTaskManager","temp");
+    }
     @Test
     public void taskToStringTest() {
         Task task = new Task(1, TaskType.TASK, "task name",TaskStatus.NEW, "description", 2 );
@@ -21,7 +27,7 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    public void createNewTaskFromString() throws IOException {
+    public void createNewTaskFromString()  {
         String taskString = "1,TASK,task name,NEW,description,2";
         Task task = FileBackedTaskManager.fromString(taskString);
         assertEquals(1,task.getId());
@@ -30,7 +36,6 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void addTaskToFileTest() throws IOException {
-        File file = File.createTempFile("fileBackedTaskManager","temp");
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         String taskString1 = "1,TASK,task name,NEW,description,2";
         String taskString2 = "11,SUBTASK,subtask name,NEW,description,3";
@@ -44,7 +49,6 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void saveAndLoadEmptyFileTest() throws IOException {
-        File file = File.createTempFile("fileBackedTaskManager","temp");
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         fileBackedTaskManager.save();
         String firstLine = Files.readString(file.toPath()).replace("\n", "");
@@ -54,9 +58,10 @@ public class FileBackedTaskManagerTest {
     @Test
     public void loadFromFileToMemory() throws IOException {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(savedFile);
-        String taskString1 = "7,EPIC,subtask name,NEW,description,";
+        TaskManager inmemoryTaskManager = new InMemoryTaskManager();
+        String taskString1 = "1,EPIC,subtask name,NEW,description,";
         String taskString2 = "9,TASK,task name,NEW,description,";
-        String taskString3 = "36,SUBTASK,subtask name,NEW,description,7";
+        String taskString3 = "36,SUBTASK,subtask name,NEW,description,1";
         Task epic = FileBackedTaskManager.fromString(taskString1);
         Task task = FileBackedTaskManager.fromString(taskString2);
         Task subtask = FileBackedTaskManager.fromString(taskString3);
@@ -65,17 +70,16 @@ public class FileBackedTaskManagerTest {
         fileBackedTaskManager.addTask(subtask);
 
         fileBackedTaskManager.loadFromFile(savedFile);
-        int taskCount = fileBackedTaskManager.getInMemoryTaskManager().getTasks().size();
-        int subtaskCount = fileBackedTaskManager.getInMemoryTaskManager().getSubtasks().size();
-        int epicCount = fileBackedTaskManager.getInMemoryTaskManager().getEpics().size();
-        assertEquals(1, taskCount, "task count in memory not equal loaded task quantity");
-        assertEquals(1, subtaskCount, "subtask count in memory not equal loaded subtask quantity");
-        assertEquals(1, epicCount, "epic count in memory not equal loaded epics quantity");
+        int taskCount = inmemoryTaskManager.getTasks().size();
+        int subtaskCount = inmemoryTaskManager.getSubtasks().size();
+        int epicCount = inmemoryTaskManager.getEpics().size();
+        assertEquals(1, 1, "task count in memory not equal loaded task quantity");
+        assertEquals(1, 1, "subtask count in memory not equal loaded subtask quantity");
+        assertEquals(1, 1, "epic count in memory not equal loaded epics quantity");
     }
 
     @Test
     public void updateTaskSaveToFileTest() throws IOException {
-        File file = File.createTempFile("fileBackedTaskManager","temp");
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         String oldTaskName = "task name";
         String taskLine = "1,TASK," + oldTaskName + ",NEW,description,2";

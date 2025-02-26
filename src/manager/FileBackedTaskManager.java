@@ -6,19 +6,15 @@ import task.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
-    private final File file;
-    private InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+import static java.nio.file.Files.readString;
 
-    public InMemoryTaskManager getInMemoryTaskManager() {
-        return inMemoryTaskManager;
-    }
+public class FileBackedTaskManager extends InMemoryTaskManager {
+    private final File file;
 
     public String getTableHead() {
         return tableHead;
@@ -34,19 +30,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     public static Task fromString(String value) {
         String[] split = value.split(",", -1);
         int id = Integer.parseInt(split[0]);
-        String taskType = split[1];
+        TaskType taskType = TaskType.valueOf(split[1]);
         String name = split[2];
-        String status = split[3];
+        TaskStatus status = TaskStatus.valueOf(split[3]);
         String description = split[4];
         int epicId = split.length > 5 && !split[5].isEmpty() ? Integer.parseInt(split[5]) : -1;
-        if (taskType.equals("TASK")) {
-            return new Task(id, TaskType.valueOf(taskType), name, TaskStatus.valueOf(status), description, epicId);
-        } else if (taskType.equals("SUBTASK")) {
-            return new Subtask(id, TaskType.valueOf(taskType), name, TaskStatus.valueOf(status), description, epicId);
-        } else if (taskType.equals("EPIC")) {
-            return new Epic(id, TaskType.valueOf(taskType), name, TaskStatus.valueOf(status), description, epicId);
-        }
-        throw new IllegalArgumentException("Invalid task type: " + value);
+        return switch (taskType) {
+            case TaskType.TASK ->
+                    new Task(id, taskType, name, status, description, epicId);
+            case  TaskType.SUBTASK ->
+                    new Subtask(id, taskType, name, status, description, epicId);
+            case  TaskType.EPIC ->
+                    new Epic(id, taskType, name, status, description, epicId);
+        };
     }
 
     public void save() {
@@ -72,37 +68,43 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     FileBackedTaskManager loadFromFile(File file) throws IOException {
-        String allLines = Files.readString(file.toPath());
+        String allLines = readString(file.toPath());
         String[] split = allLines.split("\n");
         List<String> list = new ArrayList<>(Arrays.asList(split));
         Iterator<String> iterator = list.iterator();
         while (iterator.hasNext()) {
             String line = iterator.next();
+            if(line.startsWith("id,")) {
+                continue;
+            }
             String[] split1 = line.split(",");
             String taskType = split1[1];
             if (taskType.equals("EPIC")) {
                 Task task = fromString(line);
-                inMemoryTaskManager.addEpic((Epic) task);
+                super.addEpic((Epic) task);
                 iterator.remove();
             }
         }
         for (String line : list) {
-            String[] split1 = line.split(",");
-            String taskType = split1[1];
-            if (taskType.equals("TASK")) {
-                Task task = fromString(line);
-                inMemoryTaskManager.addTask(task);
+            if (line.startsWith("id,")) {
+                continue;
             }
-            if (taskType.equals("SUBTASK")) {
+            String[] split1 = line.split(",");
+            TaskType taskType = TaskType.valueOf(split1[1]);
+            if (taskType.equals(TaskType.TASK)) {
                 Task task = fromString(line);
-                inMemoryTaskManager.addSubtask((Subtask) task);
+                super.addTask(task);
+            }
+            if (taskType.equals(TaskType.SUBTASK)) {
+                Task task = fromString(line);
+                super.addSubtask((Subtask) task);
             }
         }
         return this;
     }
 
     public int getTaskCount() throws IOException {
-        String allLines = Files.readString(file.toPath());
+        String allLines = readString(file.toPath());
         String[] split = allLines.split("\n");
         return split.length - 1;
     }
