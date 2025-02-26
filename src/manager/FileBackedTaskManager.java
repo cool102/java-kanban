@@ -74,7 +74,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         Iterator<String> iterator = list.iterator();
         while (iterator.hasNext()) {
             String line = iterator.next();
-            if(line.startsWith("id,")) {
+            if (line.startsWith("id,")) {
                 continue;
             }
             String[] split1 = line.split(",");
