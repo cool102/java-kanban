@@ -54,7 +54,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             writeTaskToFile(tasks, fw);
             writeTaskToFile(subtasks, fw);
             writeTaskToFile(epics, fw);
-            FileBackedTaskManager.writeTaskToFile(subtasks, fw);
         } catch (IOException ioe) {
             throw new ManagerSaveException(ioe.getMessage());
         }
