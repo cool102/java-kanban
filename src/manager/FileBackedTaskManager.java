@@ -67,7 +67,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    FileBackedTaskManager loadFromFile(File file) throws IOException {
+    public static FileBackedTaskManager loadFromFile(File file) throws IOException {
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
         String allLines = readString(file.toPath());
         String[] split = allLines.split("\n");
         List<String> list = new ArrayList<>(Arrays.asList(split));
@@ -77,11 +78,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             if (line.startsWith("id,")) {
                 continue;
             }
-            String[] split1 = line.split(",");
-            String taskType = split1[1];
-            if (taskType.equals("EPIC")) {
-                Task task = fromString(line);
-                super.addEpic((Epic) task);
+            Task task = fromString(line);
+            if (task instanceof Epic epic) {
+                manager.addEpic(epic);
                 iterator.remove();
             }
         }
@@ -89,18 +88,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             if (line.startsWith("id,")) {
                 continue;
             }
-            String[] split1 = line.split(",");
-            TaskType taskType = TaskType.valueOf(split1[1]);
-            if (taskType.equals(TaskType.TASK)) {
-                Task task = fromString(line);
-                super.addTask(task);
-            }
-            if (taskType.equals(TaskType.SUBTASK)) {
-                Task task = fromString(line);
-                super.addSubtask((Subtask) task);
+            Task task = fromString(line);
+            if (task instanceof Subtask) {
+                manager.addSubtask((Subtask)task);
+            } else if (task.getClass() == Task.class) {
+                manager.addTask(task);
             }
         }
-        return this;
+        return manager;
     }
 
     public int getTaskCount() throws IOException {

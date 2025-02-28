@@ -57,25 +57,13 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void loadFromFileToMemory() throws IOException {
-        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(savedFile);
-        TaskManager inmemoryTaskManager = new InMemoryTaskManager();
-        String taskString1 = "1,EPIC,subtask name,NEW,description,";
-        String taskString2 = "9,TASK,task name,NEW,description,";
-        String taskString3 = "36,SUBTASK,subtask name,NEW,description,1";
-        Task epic = FileBackedTaskManager.fromString(taskString1);
-        Task task = FileBackedTaskManager.fromString(taskString2);
-        Task subtask = FileBackedTaskManager.fromString(taskString3);
-        fileBackedTaskManager.addTask(epic);
-        fileBackedTaskManager.addTask(task);
-        fileBackedTaskManager.addTask(subtask);
-
-        fileBackedTaskManager.loadFromFile(savedFile);
-        int taskCount = inmemoryTaskManager.getTasks().size();
-        int subtaskCount = inmemoryTaskManager.getSubtasks().size();
-        int epicCount = inmemoryTaskManager.getEpics().size();
-        assertEquals(1, 1, "task count in memory not equal loaded task quantity");
-        assertEquals(1, 1, "subtask count in memory not equal loaded subtask quantity");
-        assertEquals(1, 1, "epic count in memory not equal loaded epics quantity");
+        FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(savedFile);
+        int taskCount = fileBackedTaskManager.getTasks().size();
+        int subtaskCount = fileBackedTaskManager.getSubtasks().size();
+        int epicCount = fileBackedTaskManager.getEpics().size();
+        assertEquals(1, taskCount, "task count in memory not equal loaded task quantity");
+        assertEquals(1, subtaskCount, "subtask count in memory not equal loaded subtask quantity");
+        assertEquals(1, epicCount, "epic count in memory not equal loaded epics quantity");
     }
 
     @Test
