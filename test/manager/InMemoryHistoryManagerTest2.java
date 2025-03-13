@@ -3,10 +3,7 @@ package manager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import task.Epic;
-import task.Subtask;
-import task.Task;
-import task.TaskStatus;
+import task.*;
 
 import java.util.List;
 
@@ -19,10 +16,10 @@ public class InMemoryHistoryManagerTest2 {
     @BeforeEach
     public void prepareFixture() {
         manager = new InMemoryTaskManager();
-        Task task = new Task("task 1", "Description");
+        Task task = new Task(TaskType.TASK, "task name", TaskStatus.NEW, "task description", 999, 180, "2000-01-01 01:00");
         addedTask = manager.addTask(task);
-        epic = manager.addEpic(new Epic("Epic 1", "Epic description"));
-        subtask = manager.addSubtask(new Subtask("Subtask 1", "Subtask description", TaskStatus.NEW, epic.getId()));
+        epic = manager.addEpic(new Epic(TaskType.EPIC, "epic 1", TaskStatus.NEW, "simple epic 1", -1));
+        subtask = manager.addSubtask(new Subtask(TaskType.SUBTASK, "subtask 2 name", TaskStatus.NEW, "subtask 2 description", epic.getId(), 60, "2000-01-02 02:00"));
     }
 
     @Test

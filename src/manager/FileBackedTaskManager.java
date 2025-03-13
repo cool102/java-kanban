@@ -15,16 +15,11 @@ import static java.nio.file.Files.readString;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
-
-    public String getTableHead() {
-        return tableHead;
-    }
-
     private final String tableHead;
 
     public FileBackedTaskManager(File file) {
         this.file = file;
-        tableHead = "id,type,name,status,description,epic";
+        tableHead = "id,type,name,status,description,epic,duration,startTime,endTime";
     }
 
     public static Task fromString(String value) {
@@ -35,28 +30,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         TaskStatus status = TaskStatus.valueOf(split[3]);
         String description = split[4];
         int epicId = split.length > 5 && !split[5].isEmpty() ? Integer.parseInt(split[5]) : -1;
+        long duration = Long.parseLong(split[6]);
+        String startTime = split[7];
         return switch (taskType) {
-            case TaskType.TASK ->
-                    new Task(id, taskType, name, status, description, epicId);
-            case  TaskType.SUBTASK ->
-                    new Subtask(id, taskType, name, status, description, epicId);
-            case  TaskType.EPIC ->
-                    new Epic(id, taskType, name, status, description, epicId);
+            case TaskType.TASK -> new Task(id, taskType, name, status, description, epicId, duration, startTime);
+            case TaskType.SUBTASK -> new Subtask(id, taskType, name, status, description, epicId, duration, startTime);
+            case TaskType.EPIC -> new Epic(id, taskType, name, status, description, epicId);
         };
-    }
-
-    public void save() {
-        try (FileWriter fw = new FileWriter(file, false)) {
-            fw.write(tableHead + "\n");
-            List<Task> tasks = getTasks();
-            List<Subtask> subtasks = getSubtasks();
-            List<Epic> epics = getEpics();
-            writeTaskToFile(tasks, fw);
-            writeTaskToFile(subtasks, fw);
-            writeTaskToFile(epics, fw);
-        } catch (IOException ioe) {
-            throw new ManagerSaveException(ioe.getMessage());
-        }
     }
 
     private static <T extends Task> void writeTaskToFile(List<T> tasks, FileWriter fw) throws IOException {
@@ -89,12 +69,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             Task task = fromString(line);
             if (task instanceof Subtask) {
-                manager.addSubtask((Subtask)task);
+                manager.addSubtask((Subtask) task);
             } else if (task.getClass() == Task.class) {
                 manager.addTask(task);
             }
         }
         return manager;
+    }
+
+    public String getTableHead() {
+        return tableHead;
+    }
+
+    public void save() {
+        try (FileWriter fw = new FileWriter(file, false)) {
+            fw.write(tableHead + "\n");
+            List<Task> tasks = getTasks();
+            List<Subtask> subtasks = getSubtasks();
+            List<Epic> epics = getEpics();
+            writeTaskToFile(tasks, fw);
+            writeTaskToFile(subtasks, fw);
+            writeTaskToFile(epics, fw);
+        } catch (IOException ioe) {
+            throw new ManagerSaveException(ioe.getMessage());
+        }
     }
 
     public int getTaskCount() throws IOException {

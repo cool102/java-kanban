@@ -3,10 +3,7 @@ package manager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import task.Epic;
-import task.Subtask;
-import task.Task;
-import task.TaskStatus;
+import task.*;
 
 class InMemoryTaskManagerTest {
     private static TaskManager manager;
@@ -15,7 +12,6 @@ class InMemoryTaskManagerTest {
     private static Task task3;
     private static Task addedTask1;
     private static Task addedTask2;
-    private static Task addedTask3;
     private static Epic epic1;
     private static Epic addedEpic;
     private static Subtask subtask1;
@@ -26,16 +22,19 @@ class InMemoryTaskManagerTest {
     @BeforeEach
     public void prepareFixture() {
         manager = Managers.getDefault();
-        task1 = new Task("task 1", "simple task 1");
-        task2 = new Task("task 1", "task 2 with status ", TaskStatus.NEW);
-        task3 = new Task("task 1", "task 2 with status ", TaskStatus.NEW);
+        task1 = new Task(1,TaskType.TASK, "Задача 1", TaskStatus.NEW, "Описание", 0,
+                60, "2025-03-13 10:00");
+        task2 = new Task(2,TaskType.TASK, "Задача 2", TaskStatus.NEW, "Описание", 0,
+                60, "2025-03-13 10:00");
+        task3 = new Task(TaskType.TASK, "Задача 3", TaskStatus.NEW, "Описание", 0,
+                60, "2025-03-13 10:00");
         task3.setId(999);
         addedTask1 = manager.addTask(task1);
         addedTask2 = manager.addTask(task2);
-        epic1 = new Epic("epic 1", "simple epic 1");
+        epic1 = new Epic(TaskType.EPIC, "epic 1", TaskStatus.NEW, "simple epic 1", -1);
         addedEpic = manager.addEpic(epic1);
-        subtask1 = new Subtask("subtask 1", "simple subtask 1", TaskStatus.NEW, addedEpic.getId());
-        subtask2 = new Subtask("subtask 2", "simple subtask 2", TaskStatus.NEW, addedEpic.getId());
+        subtask1 = new Subtask(TaskType.SUBTASK, "subtask 1  name", TaskStatus.NEW, "subtask 1 description", 3, 180, "2000-01-01 01:00");
+        subtask2 = new Subtask(TaskType.SUBTASK, "subtask 2  name", TaskStatus.NEW, "subtask 2 description", 3, 180, "2000-01-01 01:00");
         addedSubtask1 = manager.addSubtask(subtask1);
         addedSubtask2 = manager.addSubtask(subtask2);
     }
@@ -51,7 +50,7 @@ class InMemoryTaskManagerTest {
     public void checkTaskManagerWork() {
         Assertions.assertEquals(2, manager.getSubtasks().size(), "Список субтасков не равен ожидаемому");
         Assertions.assertEquals(2, manager.getTasks().size(), "Список субтасков не равен ожидаемому");
-        Assertions.assertEquals(1, manager.getEpics().size(), "Список субтасков не равен ожидаемому");
+        Assertions.assertEquals(1, manager.getEpics().size(), "Список эпиков не равен ожидаемому");
         Assertions.assertEquals(manager.getTaskById(addedTask1.getId()), addedTask1, "Добавленная и полученная задачи не равны");
         Assertions.assertEquals(manager.getTaskById(addedTask2.getId()), addedTask2, "Добавленная и полученная задачи не равны");
         Assertions.assertEquals(manager.getSubtaskById(subtask1.getId()), addedSubtask1, "Добавленная и полученная задачи не равны");
