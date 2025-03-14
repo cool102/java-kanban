@@ -7,7 +7,7 @@ import task.*;
 
 import java.util.List;
 
-public class InMemoryHistoryManagerTest2 {
+public class InMemoryHistoryManagerSecondTest {
     private TaskManager manager;
     private Task addedTask;
     private Epic epic;

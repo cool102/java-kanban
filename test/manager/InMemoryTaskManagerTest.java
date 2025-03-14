@@ -25,16 +25,16 @@ class InMemoryTaskManagerTest {
         task1 = new Task(1,TaskType.TASK, "Задача 1", TaskStatus.NEW, "Описание", 0,
                 60, "2025-03-13 10:00");
         task2 = new Task(2,TaskType.TASK, "Задача 2", TaskStatus.NEW, "Описание", 0,
-                60, "2025-03-13 10:00");
+                60, "2025-03-14 10:00");
         task3 = new Task(TaskType.TASK, "Задача 3", TaskStatus.NEW, "Описание", 0,
-                60, "2025-03-13 10:00");
+                60, "2025-03-15 10:00");
         task3.setId(999);
         addedTask1 = manager.addTask(task1);
         addedTask2 = manager.addTask(task2);
         epic1 = new Epic(TaskType.EPIC, "epic 1", TaskStatus.NEW, "simple epic 1", -1);
         addedEpic = manager.addEpic(epic1);
         subtask1 = new Subtask(TaskType.SUBTASK, "subtask 1  name", TaskStatus.NEW, "subtask 1 description", 3, 180, "2000-01-01 01:00");
-        subtask2 = new Subtask(TaskType.SUBTASK, "subtask 2  name", TaskStatus.NEW, "subtask 2 description", 3, 180, "2000-01-01 01:00");
+        subtask2 = new Subtask(TaskType.SUBTASK, "subtask 2  name", TaskStatus.NEW, "subtask 2 description", 3, 180, "2000-01-03 01:00");
         addedSubtask1 = manager.addSubtask(subtask1);
         addedSubtask2 = manager.addSubtask(subtask2);
     }

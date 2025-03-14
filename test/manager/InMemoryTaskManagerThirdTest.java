@@ -9,7 +9,7 @@ import task.TaskType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class InMemoryTaskManager3 {
+public class InMemoryTaskManagerThirdTest {
     private InMemoryTaskManager taskManager;
     private Epic epic;
 

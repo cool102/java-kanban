@@ -26,15 +26,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task addTask(Task newTask) {
-        boolean hasOverlap = getPrioritizedTasks().stream()
-                .anyMatch(existingTask -> isOverlapping(newTask, existingTask));
-        if (hasOverlap) {
-            System.out.println("Ошибка: Задача " + newTask.getName() + " пересекается с уже существующей задачей.");
-        }
+        overlapValidate(newTask);
         newTask.setId(generateTaskId());
         tasks.put(newTask.getId(), newTask);
         prioritizedTasks.add(newTask);
         return newTask;
+    }
+
+    private void overlapValidate(Task newTask) {
+        boolean hasOverlap = getPrioritizedTasks().stream()
+                .anyMatch(existingTask -> isOverlapping(newTask, existingTask));
+        if (hasOverlap) {
+            throw new RuntimeException("Ошибка: Задача " + newTask.getName() + " пересекается с уже существующей задачей.");
+        }
     }
 
     private boolean isOverlapping(Task task1, Task task2) {
@@ -48,6 +52,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask addSubtask(Subtask subtask) {
+        overlapValidate(subtask);
         if (subtask.getId() == 0) {
             subtask.setId(generateTaskId());
         }
@@ -120,6 +125,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> getAllSubTasksByEpicId(int epicId) {
+        overlapValidate(epics.get(epicId));
         return getSubtasks().stream()
                 .filter(subtask -> subtask.getEpicId() == epicId)
                 .collect(Collectors.toList());
@@ -137,6 +143,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = getEpicById(epicId);
         List<Integer> subtasksIds = epic.getSubtasksIds();
         evaluateEpicStatus(epic, subtasksIds);
+        epic.calculateTimeAndDuration(List.of(forUpdate));
         subtasks.put(forUpdate.getId(), forUpdate);
         return forUpdate;
     }
@@ -165,6 +172,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtasksIds.remove(Integer.valueOf(id));
         Epic epicById = getEpicById(epicId);
         evaluateEpicStatus(epicById, subtasksIds);
+        epic.calculateTimeAndDuration(List.of(subtask));
         Subtask removed = subtasks.remove(id);
         prioritizedTasks.remove(removed);
     }
