@@ -1,4 +1,4 @@
-id,type,name,status,description,epic
-36,SUBTASK,subtask name,NEW,description,7
-7,EPIC,subtask name,NEW,description,-1
-9,TASK,task name,NEW,description,-1
+id,type,name,status,description,epic,duration,startTime,endTime
+1,TASK,task name,NEW,task description,999,180,2000-01-01 01:00,2000-01-01 04:00
+3,SUBTASK,subtask 1  name,NEW,subtask 1 description,1,180,2000-01-02 01:00,2000-01-02 04:00
+1,EPIC,epic 1,NEW,simple epic 1,-1,180,2000-01-02 01:00,2000-01-02 04:00

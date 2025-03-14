@@ -22,13 +22,13 @@ public class FileBackedTaskManagerTest {
     }
     @Test
     public void taskToStringTest() {
-        Task task = new Task(1, TaskType.TASK, "task name",TaskStatus.NEW, "description", 2 );
+        Task task = new Task(1, TaskType.TASK, "task name",TaskStatus.NEW, "description", 2, 120, "2000-01-01 04:00" );
         System.out.println(task);
     }
 
     @Test
     public void createNewTaskFromString()  {
-        String taskString = "1,TASK,task name,NEW,description,2";
+        String taskString = "1,TASK,task name,NEW,task description,999,180,2000-01-01 01:00,2000-01-01 04:00";
         Task task = FileBackedTaskManager.fromString(taskString);
         assertEquals(1,task.getId());
         assertEquals("task name",task.getName());
@@ -37,14 +37,14 @@ public class FileBackedTaskManagerTest {
     @Test
     public void addTaskToFileTest() throws IOException {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
-        String taskString1 = "1,TASK,task name,NEW,description,2";
-        String taskString2 = "11,SUBTASK,subtask name,NEW,description,3";
+        String taskString1 = "1,TASK,task name,NEW,task description,999,180,2000-01-01 01:00,2000-01-01 04:00";
+        String taskString2 = "11,TASK,task name,NEW,task description,3,180,2000-01-02 01:00,2000-01-02 04:00";
         Task task1 = FileBackedTaskManager.fromString(taskString1);
         Task task2 = FileBackedTaskManager.fromString(taskString2);
         fileBackedTaskManager.addTask(task1);
         fileBackedTaskManager.addTask(task2);
         int actual = fileBackedTaskManager.getTaskCount();
-        assertEquals(2, actual, "task count in file not eqaul created task quantity");
+        assertEquals(2, actual, "task count in file not equal created task quantity");
     }
 
     @Test
@@ -69,8 +69,7 @@ public class FileBackedTaskManagerTest {
     @Test
     public void updateTaskSaveToFileTest() throws IOException {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
-        String oldTaskName = "task name";
-        String taskLine = "1,TASK," + oldTaskName + ",NEW,description,2";
+        String taskLine = "1,TASK,task name,NEW,task description,2,180,2000-01-01 01:00,2000-01-01 04:00";
         Task task = FileBackedTaskManager.fromString(taskLine);
         fileBackedTaskManager.addTask(task);
         String newTaskName = "task name 2";
