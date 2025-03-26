@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import gson.adapter.DurationTypeAdapter;
+import gson.adapter.LocalDateTimeTypeAdapter;
 import manager.HistoryManager;
 import manager.Managers;
 import manager.TaskManager;
@@ -13,38 +15,48 @@ import task.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class BaseHttpHandler implements HttpHandler {
     HistoryManager historyManager = Managers.getDefaultHistory();
     TaskManager taskManager;
 
-    public BaseHttpHandler(TaskManager manager) {
-        this.taskManager = manager;
+    public BaseHttpHandler(TaskManager taskManager) {
+        this.taskManager = taskManager;
+    }
+
+    public static Gson getGson() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).registerTypeAdapter(Duration.class, new DurationTypeAdapter());
+        Gson gson = gsonBuilder.create();
+        return gson;
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         InputStream requestBody = httpExchange.getRequestBody();
-        Headers requestHeaders = httpExchange.getRequestHeaders();// Тело запроса
+        Headers requestHeaders = httpExchange.getRequestHeaders();
         URI uri = httpExchange.getRequestURI();
         Endpoint endpoint = getEndpoint(httpExchange);
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.serializeNulls();
-        gsonBuilder.setPrettyPrinting();
-        Gson gson = gsonBuilder.create();
         switch (endpoint) {
             case GET_TASKS:
                 System.out.println();
                 List<Task> tasks = taskManager.getTasks();
-                String json = gson.toJson(tasks);
+                String json = getGson().toJson(tasks);
                 sendText(httpExchange, json);
                 break;
             case GET_TASK_BY_ID:
-                sendText(httpExchange, taskManager.getTaskById(Integer.parseInt(uri.getPath().split("/")[3])).toString());
+                int id = Integer.parseInt(uri.getPath().split("/")[2]);
+                Task taskById = taskManager.getTaskById(id);
+                if (taskById != null) {
+                    sendText(httpExchange, getGson().toJson(taskById));
+                } else {
+                    sendNoFound(httpExchange, "");
+                }
                 break;
             case CREATE_TASK:
                 //...
@@ -67,12 +79,6 @@ public abstract class BaseHttpHandler implements HttpHandler {
             case UPDATE_SUBTASK:
                 //...
                 break;
-        }
-
-        // отправляем тело ответа, записывая строку в выходящий поток
-        String response = "Hey! Glad to see you on our server.";
-        try (OutputStream os = httpExchange.getResponseBody()) {
-            os.write(response.getBytes());
         }
     }
 

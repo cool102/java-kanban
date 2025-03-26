@@ -15,7 +15,7 @@ public class Task {
     protected String description;
     protected TaskType taskType;
     protected int epicId;
-    protected DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    protected transient DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     Duration duration;
     LocalDateTime startTime;
 
