@@ -33,9 +33,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         long duration = Long.parseLong(split[6]);
         String startTime = split[7];
         return switch (taskType) {
-            case TaskType.TASK -> new Task(id, taskType, name, status, description, epicId, duration, startTime);
-            case TaskType.SUBTASK -> new Subtask(id, taskType, name, status, description, epicId, duration, startTime);
-            case TaskType.EPIC -> new Epic(id, taskType, name, status, description, epicId);
+//            case TaskType.TASK -> new Task(id, taskType, name, status, description, epicId, duration, startTime);
+//            case TaskType.SUBTASK -> new Subtask(id, taskType, name, status, description, epicId, duration, startTime);
+//            case TaskType.EPIC -> new Epic(id, taskType, name, status, description, epicId);
+            case TASK : yield new Task(id, taskType, name, status, description, epicId, duration, startTime);
+            case SUBTASK : yield new Subtask(id, taskType, name, status, description, epicId, duration, startTime);
+            case EPIC : yield new Epic(id, taskType, name, status, description, epicId);
         };
     }
 

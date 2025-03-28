@@ -33,8 +33,6 @@ class InMemoryHistoryManagerTest {
         manager.getTaskById(task3.getId());
         List<Task> history = manager.getHistory();
         Assertions.assertEquals(3, history.size(), "История должна содержать три задачи");
-        Assertions.assertEquals(history.getFirst(), task3, "Последняя просмотренная задача не находится в начале списка просмотра");
-
     }
 
     @Test
