@@ -39,6 +39,9 @@ public class HttpTaskManagerTasksTest {
 
     @BeforeEach
     public void serverStart() throws IOException {
+        taskManager.clearTasks();
+        taskManager.clearEpics();
+        taskManager.clearSubtasks();
         httpTaskServer.start();
     }
 
@@ -101,6 +104,29 @@ public class HttpTaskManagerTasksTest {
         HttpResponse<String> response = sendRequest(request);
         int responseCode = response.statusCode();
         assertEquals(404, responseCode);
+    }
+
+    @Test()
+    public void createTaskHasInteractions() {
+        Task task1 = new Task(TaskType.TASK, "task name 1 ", TaskStatus.NEW, "task description 1", 999, 180, "2000-01-01 01:00");
+        taskManager.addTask(task1);
+        String taskJson = """
+                {
+                        "taskStatus": "NEW",
+                        "name": "task name 1 ",
+                        "description": "task description 1",
+                        "taskType": "TASK",
+                        "epicId": 999,
+                        "duration": "PT3H",
+                        "startTime": "2000-01-01 01:00"
+                    }""";
+        URI uri = URI.create("http://localhost:8080/tasks");
+        HttpRequest request = getHttpRequest("POST", taskJson, uri);
+        HttpResponse<String> response = sendRequest(request);
+        int responseCode = response.statusCode();
+        assertEquals(406, responseCode);
+        List<Task> tasks = taskManager.getTasks();
+        assertEquals(1, tasks.size());
     }
 
     @Test()

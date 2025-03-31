@@ -23,7 +23,7 @@ import java.util.List;
 
 public abstract class BaseHttpHandler implements HttpHandler {
 
-    InMemoryTaskManager taskManager;
+    private TaskManager taskManager;
 
     public BaseHttpHandler(TaskManager taskManager) {
         this.taskManager = (InMemoryTaskManager) taskManager;
@@ -58,13 +58,21 @@ public abstract class BaseHttpHandler implements HttpHandler {
                 break;
             case CREATE_TASK:
                 Task createTask = getGson().fromJson(body, Task.class);
-                taskManager.addTask(createTask);
-                sendText(httpExchange, "");
+                try {
+                    taskManager.addTask(createTask);
+                    sendText(httpExchange, "");
+                } catch (RuntimeException e) {
+                    sendHasInteractions(httpExchange, e.getMessage());
+                }
                 break;
             case UPDATE_TASK:
                 Task updatedTask = getGson().fromJson(body, Task.class);
-                taskManager.updateTask(updatedTask);
-                sendText(httpExchange, "");
+                try {
+                    taskManager.updateTask(updatedTask);
+                    sendText(httpExchange, "");
+                } catch (RuntimeException e) {
+                    sendHasInteractions(httpExchange, e.getMessage());
+                }
                 break;
             case DELETE_TASK:
                 int idForRemove = Integer.parseInt(uri.getPath().split("/")[2]);
@@ -87,13 +95,21 @@ public abstract class BaseHttpHandler implements HttpHandler {
                 break;
             case CREATE_SUBTASK:
                 Subtask createdSubtask = getGson().fromJson(body, Subtask.class);
-                taskManager.addSubtask(createdSubtask);
-                sendText(httpExchange, "");
+                try {
+                    taskManager.addSubtask(createdSubtask);
+                    sendText(httpExchange, "");
+                } catch (RuntimeException e) {
+                    sendHasInteractions(httpExchange, e.getMessage());
+                }
                 break;
             case UPDATE_SUBTASK:
                 Subtask updatedSubtask = getGson().fromJson(body, Subtask.class);
-                taskManager.updateSubtask(updatedSubtask);
-                sendText(httpExchange, "");
+                try {
+                    taskManager.updateSubtask(updatedSubtask);
+                    sendText(httpExchange, "");
+                } catch (RuntimeException e) {
+                    sendHasInteractions(httpExchange, e.getMessage());
+                }
                 break;
             case DELETE_SUBTASK:
                 int subIdForRemove = Integer.parseInt(uri.getPath().split("/")[2]);
