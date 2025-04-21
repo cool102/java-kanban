@@ -1,11 +1,13 @@
 package model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Duration;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 public class Film {
     private Long id;
     private String name;
