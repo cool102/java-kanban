@@ -9,6 +9,8 @@
 
 #
 java-kanban.iml
+misc.xml
+modules.xml
 
 #
 .idea/
