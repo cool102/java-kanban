@@ -12,7 +12,4 @@ public class Film {
     private String description;
     private Date releaseDate;
     private Duration duration;
-
-    public Film() {
-    }
 }

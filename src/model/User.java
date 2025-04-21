@@ -11,7 +11,4 @@ public class User {
     private String login;
     private String name;
     private Date birthdate;
-
-    public User() {
-    }
 }
