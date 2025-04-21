@@ -22,9 +22,9 @@ class InMemoryTaskManagerTest {
     @BeforeEach
     public void prepareFixture() {
         manager = Managers.getDefault();
-        task1 = new Task(1,TaskType.TASK, "Задача 1", TaskStatus.NEW, "Описание", 0,
+        task1 = new Task(1, TaskType.TASK, "Задача 1", TaskStatus.NEW, "Описание", 0,
                 60, "2025-03-13 10:00");
-        task2 = new Task(2,TaskType.TASK, "Задача 2", TaskStatus.NEW, "Описание", 0,
+        task2 = new Task(2, TaskType.TASK, "Задача 2", TaskStatus.NEW, "Описание", 0,
                 60, "2025-03-14 10:00");
         task3 = new Task(TaskType.TASK, "Задача 3", TaskStatus.NEW, "Описание", 0,
                 60, "2025-03-15 10:00");

@@ -18,20 +18,21 @@ public class FileBackedTaskManagerTest {
 
     @BeforeEach
     public void setup() throws IOException {
-       file = File.createTempFile("fileBackedTaskManager","temp");
+        file = File.createTempFile("fileBackedTaskManager", "temp");
     }
+
     @Test
     public void taskToStringTest() {
-        Task task = new Task(1, TaskType.TASK, "task name",TaskStatus.NEW, "description", 2, 120, "2000-01-01 04:00" );
+        Task task = new Task(1, TaskType.TASK, "task name", TaskStatus.NEW, "description", 2, 120, "2000-01-01 04:00");
         System.out.println(task);
     }
 
     @Test
-    public void createNewTaskFromString()  {
+    public void createNewTaskFromString() {
         String taskString = "1,TASK,task name,NEW,task description,999,180,2000-01-01 01:00,2000-01-01 04:00";
         Task task = FileBackedTaskManager.fromString(taskString);
-        assertEquals(1,task.getId());
-        assertEquals("task name",task.getName());
+        assertEquals(1, task.getId());
+        assertEquals("task name", task.getName());
     }
 
     @Test

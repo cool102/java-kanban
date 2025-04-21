@@ -5,8 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.*;
 
-import java.io.File;
-
 public class InMemoryTaskManagerSecondTest {
     private static TaskManager manager;
     private static Task task1;
